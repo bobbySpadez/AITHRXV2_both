@@ -182,6 +182,77 @@ namespace Airthwholesale.Bal.Logic
 
             // return null;
         }
+
+
+
+        /// <summary>
+        /// For getting GetVehicles list For All Pages response one by one
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        public async Task<List<GraphQLDTO>> GetGraphQLForAllPages(IICCBatchApiDTO iICCBatchApiDTO)
+        {
+            var client = new HttpClient();
+            //Test URI
+            //var request = new HttpRequestMessage(HttpMethod.Post, "https://inventory-rds-stg.cd-dev.ca/graphql"); 
+
+            //Real URI
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://inventory.app.canadadrives.ca/graphql");
+            //Real Credentianls
+            string Pageno = "0";
+            // for Getting All Data
+            var TotalPageNo = 1;
+            List<GraphQLDTO> ListAPiresponse = new List<GraphQLDTO>();
+            for (int i = 1; i <= TotalPageNo; i++)
+            {
+                request.Headers.Add("x-api-key", "da2-fbnwnf252vh6ffz3g7eimmo5rq");
+                var content = new StringContent("{\"query\":\"query{\\r\\n     getVehicles(limit:3209,offset:0) {   Vehicles{" +
+                                                                                                                            "vin," +
+                                                                                                                            "stock_number," +
+                                                                                                                            "year," +
+                                                                                                                            "kms," +
+                                                                                                                            "make," +
+                                                                                                                            "model," +
+                                                                                                                            "trim," +
+                                                                                                                            "body_type," +
+                                                                                                                            "exterior_colour," +
+                                                                                                                            "product_price," +
+                                                                                                                            "condition," +
+                                                                                                                            "landed_at," +
+                                                                                                                            "group_name," +
+                                                                                                                            "dealer_name," +
+                                                                                                                            "drivetrain, " +
+                                                                                                                            "# vehicle_features," +
+                                                                                                                            "seats," +
+                                                                                                                            "transmission," +
+                                                                                                                            "condition_status," +
+                                                                                                                            "interior_colour," +
+                                                                                                                            "# inspection_report,\\r\\n" +
+                                                                                                                            "}\\r\\n" +
+                                                                                                                         "total,\\r\\n" +
+                                                                                                                         "offset,\\r\\n" +
+                                                                                                                         "limit,\\r\\n" +
+                                                                                                                      "}\\r\\n}\"," +
+                                                                                                                      "\"variables\":{}}"
+                                                                                                                      , null, "application/json");
+                request.Content = content;
+                var response = await client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                string stringResponse = response.Content.ReadAsStringAsync().Result;
+
+                var vehicleList = System.Text.Json.JsonSerializer.Deserialize<GraphQLDTO>(stringResponse);
+                TotalPageNo = vehicleList.data.getVehicles.total;
+                int pagnoconvert = i + 1;
+                Pageno = pagnoconvert.ToString();
+                ListAPiresponse.Add(vehicleList);
+            }
+
+            return ListAPiresponse;
+
+            // return null;
+        }
+
         /// <summary>
         /// For getting GetVehicles list For All Pages
         /// </summary>
@@ -916,6 +987,26 @@ namespace Airthwholesale.Bal.Logic
             }
         }
 
+        public async Task<List<JDPDealerInfoDTO>> InsertDealersFromVehicleInfoforGraphQL(string OpCode, string DealerId)
+        {
+
+            try
+            {
+                string result = string.Empty;
+                string procName = SPROC_Names.UspInsertDealersFromVehicleInfoforGraphQL.ToString();
+                var ParamsArray = new SqlParameter[2];
+                ParamsArray[0] = new SqlParameter() { ParameterName = "@OpParm", Value = DealerId, DbType = System.Data.DbType.String };
+                ParamsArray[1] = new SqlParameter() { ParameterName = "@OpCode", Value = OpCode, DbType = System.Data.DbType.String };
+                List<JDPDealerInfoDTO> resultData = new List<JDPDealerInfoDTO>();
+                resultData = _jDPDealerInfoDTORepository.ExecuteWithJsonResult_FROM_JDPSERVER(procName, "JDPDealerInfo", ParamsArray);
+                return resultData;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public async Task<List<JDPDealerInfoDTO>> SyncJDPVehicleInfo(string OpCode, string DealerId)
         {
 
@@ -925,6 +1016,25 @@ namespace Airthwholesale.Bal.Logic
                 string procName = SPROC_Names.SP_Synch_Aithr_JDP_Inventory.ToString();
                 var ParamsArray = new SqlParameter[1];
                 ParamsArray[0] = new SqlParameter() { ParameterName = "@pAsOfDate", Value = DateTime.Now, DbType = System.Data.DbType.String };               
+                List<JDPDealerInfoDTO> resultData = new List<JDPDealerInfoDTO>();
+                resultData = _jDPDealerInfoDTORepository.ExecuteWithJsonResult_FROM_JDPSERVER(procName, "JDPDealerInfo", ParamsArray);
+                return resultData;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<JDPDealerInfoDTO>> SyncJDPVehicleInfoGraphQL(string OpCode, string DealerId)
+        {
+
+            try
+            {
+                string result = string.Empty;
+                string procName = SPROC_Names.SP_SyncJDPVehicleInfoGraphQL_Inventory.ToString();
+                var ParamsArray = new SqlParameter[1];
+                ParamsArray[0] = new SqlParameter() { ParameterName = "@pAsOfDate", Value = DateTime.Now, DbType = System.Data.DbType.String };
                 List<JDPDealerInfoDTO> resultData = new List<JDPDealerInfoDTO>();
                 resultData = _jDPDealerInfoDTORepository.ExecuteWithJsonResult_FROM_JDPSERVER(procName, "JDPDealerInfo", ParamsArray);
                 return resultData;
@@ -1006,6 +1116,23 @@ namespace Airthwholesale.Bal.Logic
             try
             {
                 string procName = SPROC_Names.SP_JDP_NewVehicleList.ToString();
+                var ParamsArray = new SqlParameter[2];
+                ParamsArray[0] = new SqlParameter() { ParameterName = "@OpParm", Value = "", DbType = System.Data.DbType.String };
+                ParamsArray[1] = new SqlParameter() { ParameterName = "@OpCode", Value = "", DbType = System.Data.DbType.String };
+                var resultData = _jDPVehicleInfoDTORepository.ExecuteWithJsonResult_FROM_JDPSERVER(procName, "VehicleList", ParamsArray);
+                return resultData != null ? resultData.ToList() : new List<JDPVehicleInfoDTO>();
+            }
+            catch (AppException ex)
+            {
+                throw;
+            }
+        }
+
+        public List<JDPVehicleInfoDTO> GetVINforCBBAPIValuesforGraphQLUnits()
+        {
+            try
+            {
+                string procName = SPROC_Names.SPGetVINforCBBAPIValuesforGraphQLUnits.ToString();
                 var ParamsArray = new SqlParameter[2];
                 ParamsArray[0] = new SqlParameter() { ParameterName = "@OpParm", Value = "", DbType = System.Data.DbType.String };
                 ParamsArray[1] = new SqlParameter() { ParameterName = "@OpCode", Value = "", DbType = System.Data.DbType.String };

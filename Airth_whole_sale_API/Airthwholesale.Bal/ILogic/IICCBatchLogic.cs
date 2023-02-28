@@ -215,5 +215,28 @@ namespace Airthwholesale.Bal.ILogic
 
         JDPCBBAPIResponseDTO RemoveBackkgroudImage(IICCBatchApiDTO iICCBatchApiDTO);
 
+
+
+        /// <summary>
+        /// For getting GraphQL list For All Pages response one by one
+        /// </summary>
+        /// <returns></returns>
+        Task<List<GraphQLDTO>> GetGraphQLForAllPages(IICCBatchApiDTO iICCBatchApiDTO);
+
+
+        /// <summary>
+        ///  Graph SQL
+        /// </summary>
+        /// <returns></returns>
+        List<JDPVehicleInfoDTO> GetVINforCBBAPIValuesforGraphQLUnits();
+        // <summary>
+        ///  Graph SQL
+        /// </summary>
+        /// <returns></returns>
+
+        Task<List<JDPDealerInfoDTO>> InsertDealersFromVehicleInfoforGraphQL(string OpCode, string DealerId);
+
+        Task<List<JDPDealerInfoDTO>> SyncJDPVehicleInfoGraphQL(string OpCode, string DealerId);
+
     }
 }

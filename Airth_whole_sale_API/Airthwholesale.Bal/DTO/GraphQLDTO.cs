@@ -14,10 +14,14 @@ namespace Airthwholesale.Bal.DTO
     public class Data
     {
         public GetVehicles getVehicles { get; set; }
+      
     }
     public class GetVehicles
     {
         public List<Vehicle> Vehicles { get; set; }
+        public int total { get; set; }
+        public int offset { get; set; }
+        public int limit { get; set; }
     }
     public class Vehicle
     {
