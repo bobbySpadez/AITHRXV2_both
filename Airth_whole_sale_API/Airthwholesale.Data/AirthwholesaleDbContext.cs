@@ -47,9 +47,11 @@ namespace Airthwholesale.Data
 
         public DbSet<DGroup> DGroup { get; set; }
 
-      //  public DbSet<AspNetRoles> AspNetRoles { get; set; }
+        public DbSet<AithrRepWholeSale> AithrRepWholeSale { get; set; }
 
-      //  public DbSet<AspNetUsers> AspNetUsers { get; set; }
+        //  public DbSet<AspNetRoles> AspNetRoles { get; set; }
+
+        //  public DbSet<AspNetUsers> AspNetUsers { get; set; }
         public DbSet<JDPExceptionLoggingToDataBase> JDPExceptionLoggingToDataBase { get; set; }
 
         #endregion
@@ -95,9 +97,12 @@ namespace Airthwholesale.Data
         public DbSet<CBBPricing> CBBPricing { get; set; }
 
         public DbSet<DGroup> DGroup { get; set; }
-       // public DbSet<AspNetRoles> AspNetRoles { get; set; }
-       // public DbSet<AspNetUsers> AspNetUsers { get; set; }
-        
+
+        public DbSet<AithrRepWholeSale> AithrRepWholeSale { get; set; }
+
+        // public DbSet<AspNetRoles> AspNetRoles { get; set; }
+        // public DbSet<AspNetUsers> AspNetUsers { get; set; }
+
         public DbSet<JDPPhotoCleanedDetails> JDPPhotoCleanedDetails { get; set; }
 
 

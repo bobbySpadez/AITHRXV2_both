@@ -194,5 +194,40 @@ namespace Airthwholesale.Bal.ILogic
 
         #endregion
 
+        #region AithrRepWholeSale
+
+        /// <summary>
+        ///Get All AithrRepWholeSale
+        /// </summary>
+        /// <returns></returns>
+
+        List<AithrRepWholeSaleDTO> GetAllAithrRepWholeSale();
+
+        /// <summary>
+        /// Add AithrRepWholeSale
+        /// </summary>
+        /// <returns></returns>
+        Task<string> AddAithrRepWholeSale(AithrRepWholeSaleDTO obj);
+
+        /// <summary>
+        /// Update Users
+        /// </summary>
+        /// <returns></returns>
+        Task<string> UpdateAithrRepWholeSale(AithrRepWholeSaleDTO obj);
+
+        /// <summary>
+        /// Delete Users
+        /// </summary>
+        /// <returns></returns>
+        Task<string> DeleteAithrRepWholeSale(int id);
+
+        /// <summary>
+        ///Get AithrRepWholeSale by ID
+        /// </summary>
+        /// <returns></returns>
+        List<AithrRepWholeSaleDTO> GetAithrRepWholeSaleByIds(string id);
+
+        #endregion
+
     }
 }

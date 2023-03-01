@@ -16,6 +16,7 @@ using Nancy.Json;
 using Newtonsoft.Json;
 using System.Xml.Linq;
 using System.Text.Json;
+using Nancy;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -97,69 +98,74 @@ namespace AirthwholesaleAPI.Controllers
         #endregion
 
 
-        // [Authorize]
-        [HttpPost]
-        [Route("GetGraphQLAllPages")]
-        public async Task<IActionResult> GetGraphQLAllPages([FromBody] IICCBatchApiDTO Obj, string CallBy)
+        #region GraphQL
+        [HttpGet("GetGraphQLForAllPages")]
+        public async Task<IActionResult> GetGraphQLForAllPages()
         {
-            try
-            {
 
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                var responseObj = await _IICCBatchLogicBAL.GetGraphQLForAllPages(Obj);   //getting response
-                if (responseObj == null)
-                    return NotFound();
-                return Ok("Success");
-            }
-            catch (AppException ex)
-            {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpGet("GetGraphQL")]
-        public async Task<IActionResult> GetGraphQL()
-        {
+            //Offset is the pagination
+            //limit is the vehicle response limit
 
             try
             {
                 var client = new HttpClient();
-                var request = new HttpRequestMessage(HttpMethod.Post, "https://inventory-rds-stg.cd-dev.ca/graphql");
-                request.Headers.Add("x-api-key", "da2-xxqdj74ibzhttgdca3u5niytim");
-                var content = new StringContent("{\"query\":\"query{\\r\\n   getVehicles { \\r\\n     Vehicles{\\r\\n   vin,\\r\\n     stock_number,\\r\\n   year,\\r\\n    kms,\\r\\n     make,\\r\\n    model,\\r\\n    trim,\\r\\n    body_type,\\r\\n     exterior_colour,\\r\\n    product_price,\\r\\n                                condition,\\r\\n                                landed_at,\\r\\n                                group_name,\\r\\n                                dealer_name,\\r\\n                                drivetrain,\\r\\n                               # vehicle_features,\\r\\n    seats,\\r\\n   transmission,\\r\\n  condition_status,\\r\\n   interior_colour,\\r\\n     # inspection_report,\\r\\n    }\\r\\n    }\\r\\n}\",\"variables\":{}}", null, "application/json");
-                request.Content = content;
-                var response = await client.SendAsync(request);
+                string stringResponse = string.Empty;
+                List<Vehicle> vehicleList = new();
+                int totalVehicleCount = 0;
+                //Test URI
+                //var request = new HttpRequestMessage(HttpMethod.Post, "https://inventory-rds-stg.cd-dev.ca/graphql"); 
+
+                //Real URI
+                var initRequest = new HttpRequestMessage(HttpMethod.Post, "https://inventory.app.canadadrives.ca/graphql");
+                //Test Credentials
+                //request.Headers.Add("x-api-key", "da2-xxqdj74ibzhttgdca3u5niytim");
+
+                //Real Credentianls
+                initRequest.Headers.Add("x-api-key", "da2-fbnwnf252vh6ffz3g7eimmo5rq");
+                var queryContent = QueryContent(0);
+                initRequest.Content = queryContent;
+                var response = await client.SendAsync(initRequest);
                 response.EnsureSuccessStatusCode();
+                stringResponse = response.Content.ReadAsStringAsync().Result;
+                var rawList = System.Text.Json.JsonSerializer.Deserialize<GraphQLDTO>(stringResponse);
 
-                string stringResponse = response.Content.ReadAsStringAsync().Result;
-
-                var vehicleList = System.Text.Json.JsonSerializer.Deserialize<GraphQLDTO>(stringResponse);
-
-                var iSVehicleListEmpty = vehicleList.data.getVehicles.Vehicles.Count() > 0 ? false : true;
-
-                if (!iSVehicleListEmpty)
+                if (rawList != null)
                 {
-                    //Do the foreach loop here to insert call CBB API that we have (if multiple trim and style arises let's use the lowest number again)
-                    //Upon completing the CBB API calls let's insert it into DealerVehicles Table
+                    if (rawList.data.getVehicles.Vehicles.Count() > 0)
+                    {
+                        totalVehicleCount = rawList.data.getVehicles.total;
+                        vehicleList.AddRange(rawList.data.getVehicles.Vehicles);
+                        if (vehicleList.Count() > 0)
+                        {
+                            int iterator = 100;
+                            do
+                            {
+                                var request = new HttpRequestMessage(HttpMethod.Post, "https://inventory.app.canadadrives.ca/graphql");
+                                request.Headers.Add("x-api-key", "da2-fbnwnf252vh6ffz3g7eimmo5rq");
+                                request.Content = QueryContent(iterator);
+                                response = await client.SendAsync(request);
+                                response.EnsureSuccessStatusCode();
+                                stringResponse = response.Content.ReadAsStringAsync().Result;
+                                rawList = System.Text.Json.JsonSerializer.Deserialize<GraphQLDTO>(stringResponse);
+                                if (rawList != null)
+                                {
+                                    vehicleList.AddRange(rawList.data.getVehicles.Vehicles);
+                                }
+                                iterator += 100;
+                            } while (rawList.data.getVehicles.Vehicles.Count() > 0);
+                        }
+                    }
+                }
 
+                if (vehicleList.Count() > 0)
+                {
+                    //Do aithrx and cbb sync here
                     List<JDPVehicleInfo> JDPVehicleInfolist = new List<JDPVehicleInfo>();
 
-                    //here we applying for each page response data
-                    foreach (var responsedata in vehicleList.data.getVehicles.Vehicles)
-                    {
 
-
-                        // maping response into model
-                        JDPVehicleInfo objectvechicleInfo = InsertJDPVehicleInfoFromGraphQL(responsedata,"GraphQL");
-                        JDPVehicleInfolist.Add(objectvechicleInfo);
-
-                        
-
-                    }
+                    // maping response into model
+                    JDPVehicleInfolist = InsertJDPVehicleInfoFromGraphQL(vehicleList, "GraphQL");
+                   // JDPVehicleInfolist.Add(objectvechicleInfo);
 
                     // insert all Units in JDPPower 
                     await _jDPVehicleInfo.JDP_InsertMultiAsync(JDPVehicleInfolist);
@@ -210,19 +216,53 @@ namespace AirthwholesaleAPI.Controllers
                         VINCBBCount);
 
                     // For Sync in AithrX Table
-
-
                     var dealerlist = await _IICCBatchLogicBAL.InsertDealersFromVehicleInfoforGraphQL("1", "0");
                     var dealerlistCheck = await _IICCBatchLogicBAL.SyncJDPVehicleInfoGraphQL("1", "0");
+
                 }
 
-                return Ok(stringResponse);
+
+                return Ok("Success");
             }
             catch (Exception ex)
             {
                 throw;
             }
         }
+
+        private StringContent QueryContent(int offSet)
+        {
+            return new StringContent("{\"query\":\"query{\\r\\n     getVehicles(limit:100,offset:" + offSet + ") {   Vehicles{" +
+                                                                                                                            "vin," +
+                                                                                                                            "stock_number," +
+                                                                                                                            "year," +
+                                                                                                                            "kms," +
+                                                                                                                            "make," +
+                                                                                                                            "model," +
+                                                                                                                            "trim," +
+                                                                                                                            "body_type," +
+                                                                                                                            "exterior_colour," +
+                                                                                                                            "product_price," +
+                                                                                                                            "condition," +
+                                                                                                                            "landed_at," +
+                                                                                                                            "group_name," +
+                                                                                                                            "dealer_name," +
+                                                                                                                            "drivetrain, " +
+                                                                                                                            "# vehicle_features," +
+                                                                                                                            "seats," +
+                                                                                                                            "transmission," +
+                                                                                                                            "condition_status," +
+                                                                                                                            "interior_colour," +
+                                                                                                                            "# inspection_report,\\r\\n" +
+                                                                                                                            "}\\r\\n" +
+                                                                                                                         "total,\\r\\n" +
+                                                                                                                         "offset,\\r\\n" +
+                                                                                                                         "limit,\\r\\n" +
+                                                                                                                      "}\\r\\n}\"," +
+                                                                                                                      "\"variables\":{}}"
+                                                                                                                      , null, "application/json");
+        }
+        #endregion
 
         /// <summary>
         ///Get Vehicle Photos List By VehicleId
@@ -747,7 +787,7 @@ namespace AirthwholesaleAPI.Controllers
                 var responseObj = await _IICCBatchLogicBAL.GetVehiclesDetailsForAllPages(Obj);   //getting response
 
                 // for updating the existing status to false for Vehicle
-                // var updatestatus = _IICCBatchLogicBAL.UpdateVehicleStatus();
+                 var updatestatus = _IICCBatchLogicBAL.UpdateVehicleStatus();
 
                 //initializing list object of table class
 
@@ -1500,65 +1540,75 @@ namespace AirthwholesaleAPI.Controllers
         }
 
 
-        private static JDPVehicleInfo InsertJDPVehicleInfoFromGraphQL(Vehicle response, string CalledBy)
+        private static List<JDPVehicleInfo> InsertJDPVehicleInfoFromGraphQL(List<Vehicle> Vehicles, string CalledBy)
         {
-            JDPVehicleInfo objectvechicleinfo = new JDPVehicleInfo();
-            objectvechicleinfo.VehicleID = 0;
-            objectvechicleinfo.DealerID = 0;
-            objectvechicleinfo.DealerName = TrimStringValueToLimit(response.dealer_name, 100);
-            objectvechicleinfo.IsNew = true;
-            objectvechicleinfo.VIN = TrimStringValueToLimit(response.vin, 17);
-            objectvechicleinfo.StockNumber = TrimStringValueToLimit(response.stock_number, 100);
-            objectvechicleinfo.IsCertified = true;
-            objectvechicleinfo.Year = (response.year == 0 ? 0000 : response.year);
-            objectvechicleinfo.Make = TrimStringValueToLimit(response.make, 100);
-            objectvechicleinfo.Model = TrimStringValueToLimit(response.model, 100);
-            objectvechicleinfo.ModelCode = response.model;
-            objectvechicleinfo.Trim = TrimStringValueToLimit(response.trim, 100);
-            objectvechicleinfo.BodyName = TrimStringValueToLimit((response.body_type == null ? "" : response.body_type.ToString()), 100);
-            objectvechicleinfo.BodyStyle = "";
-            objectvechicleinfo.CityMPG = 0;
-            objectvechicleinfo.HwyMPG =0;
-            objectvechicleinfo.DaysInSotck = 0;
-            objectvechicleinfo.ValueSource = ""; ;
-            objectvechicleinfo.ExteriorColor = TrimStringValueToLimit(response.exterior_colour, 100);
-            objectvechicleinfo.InteriorColor = TrimStringValueToLimit(response.interior_colour, 100);
-            objectvechicleinfo.InteriorMaterial ="";
-            objectvechicleinfo.Engine = "";
-            objectvechicleinfo.Transmission = TrimStringValueToLimit(response.transmission, 100);
-            objectvechicleinfo.TransmissionSpeed = TrimStringValueToLimit(response.transmission, 100);
-            objectvechicleinfo.InStockDate = DateTime.Now;
-            objectvechicleinfo.LastModifiedDate = DateTime.Now;
-            objectvechicleinfo.IsSpecial =true;
-            objectvechicleinfo.BodyType = TrimStringValueToLimit(response.body_type, 100);
-            objectvechicleinfo.Locked = false;
-            objectvechicleinfo.VehicleStatus = "";
-            objectvechicleinfo.DealerCertified1 =true;
-            objectvechicleinfo.DealerCertified2 = true;
-            objectvechicleinfo.GenericExteriorColor = "";
-            objectvechicleinfo.VideoUrl = "";
-            objectvechicleinfo.Drivetrain = TrimStringValueToLimit(response.drivetrain, 100);
-            objectvechicleinfo.Mileage = 0;
-            objectvechicleinfo.Category1 = "";
-            objectvechicleinfo.Category2 = "";
-            objectvechicleinfo.Category3 = "";
-            objectvechicleinfo.Category4 = "";
-            objectvechicleinfo.Category5 = "";
-            objectvechicleinfo.Style = "";
-            objectvechicleinfo.ChromeStyleID =0;
-            objectvechicleinfo.ZipCode = "";
-            objectvechicleinfo.ExportDealerID = "";
-            objectvechicleinfo.EngineFuelType = "";
-            objectvechicleinfo.ExteriorColorCode = "";
-            objectvechicleinfo.ExteriorGenericColorDescription = "";
-            objectvechicleinfo.IsActive = true;
-            objectvechicleinfo.CreatedDate = DateTime.Now;
-            objectvechicleinfo.CreatedBy = 800;
-            objectvechicleinfo.IsInternalSynch = false;
-            objectvechicleinfo.SynchedBy = 1;
-            objectvechicleinfo.InternalID = 1;
-            objectvechicleinfo.APICalledBy = CalledBy;
-            return objectvechicleinfo;
+           
+
+            List<JDPVehicleInfo> JDPVehicleInfolist = new List<JDPVehicleInfo>();
+            // loop for adding Units in lists
+            foreach (var response in Vehicles)
+            {
+                JDPVehicleInfo objectvechicleinfo = new JDPVehicleInfo();
+                objectvechicleinfo.VehicleID = 0;
+                objectvechicleinfo.DealerID = 0;
+                objectvechicleinfo.DealerName = TrimStringValueToLimit(response.dealer_name, 100);
+                objectvechicleinfo.IsNew = true;
+                objectvechicleinfo.VIN = TrimStringValueToLimit(response.vin, 17);
+                objectvechicleinfo.StockNumber = TrimStringValueToLimit(response.stock_number, 100);
+                objectvechicleinfo.IsCertified = true;
+                objectvechicleinfo.Year = (response.year == 0 ? 0000 : response.year);
+                objectvechicleinfo.Make = TrimStringValueToLimit(response.make, 100);
+                objectvechicleinfo.Model = TrimStringValueToLimit(response.model, 100);
+                objectvechicleinfo.ModelCode = response.model;
+                objectvechicleinfo.Trim = TrimStringValueToLimit(response.trim, 100);
+                objectvechicleinfo.BodyName = TrimStringValueToLimit((response.body_type == null ? "" : response.body_type.ToString()), 100);
+                objectvechicleinfo.BodyStyle = "";
+                objectvechicleinfo.CityMPG = 0;
+                objectvechicleinfo.HwyMPG = 0;
+                objectvechicleinfo.DaysInSotck = 0;
+                objectvechicleinfo.ValueSource = ""; ;
+                objectvechicleinfo.ExteriorColor = TrimStringValueToLimit(response.exterior_colour, 100);
+                objectvechicleinfo.InteriorColor = TrimStringValueToLimit(response.interior_colour, 100);
+                objectvechicleinfo.InteriorMaterial = "";
+                objectvechicleinfo.Engine = "";
+                objectvechicleinfo.Transmission = TrimStringValueToLimit(response.transmission, 100);
+                objectvechicleinfo.TransmissionSpeed = TrimStringValueToLimit(response.transmission, 100);
+                objectvechicleinfo.InStockDate = DateTime.Now;
+                objectvechicleinfo.LastModifiedDate = DateTime.Now;
+                objectvechicleinfo.IsSpecial = true;
+                objectvechicleinfo.BodyType = TrimStringValueToLimit(response.body_type, 100);
+                objectvechicleinfo.Locked = false;
+                objectvechicleinfo.VehicleStatus = "";
+                objectvechicleinfo.DealerCertified1 = true;
+                objectvechicleinfo.DealerCertified2 = true;
+                objectvechicleinfo.GenericExteriorColor = "";
+                objectvechicleinfo.VideoUrl = "";
+                objectvechicleinfo.Drivetrain = TrimStringValueToLimit(response.drivetrain, 100);
+                objectvechicleinfo.Mileage = 0;
+                objectvechicleinfo.Category1 = "";
+                objectvechicleinfo.Category2 = "";
+                objectvechicleinfo.Category3 = "";
+                objectvechicleinfo.Category4 = "";
+                objectvechicleinfo.Category5 = "";
+                objectvechicleinfo.Style = "";
+                objectvechicleinfo.ChromeStyleID = 0;
+                objectvechicleinfo.ZipCode = "";
+                objectvechicleinfo.ExportDealerID = "";
+                objectvechicleinfo.EngineFuelType = "";
+                objectvechicleinfo.ExteriorColorCode = "";
+                objectvechicleinfo.ExteriorGenericColorDescription = "";
+                objectvechicleinfo.IsActive = true;
+                objectvechicleinfo.CreatedDate = DateTime.Now;
+                objectvechicleinfo.CreatedBy = 800;
+                objectvechicleinfo.IsInternalSynch = false;
+                objectvechicleinfo.SynchedBy = 1;
+                objectvechicleinfo.InternalID = 1;
+                objectvechicleinfo.APICalledBy = CalledBy;
+                JDPVehicleInfolist.Add(objectvechicleinfo);
+            }
+
+            
+            return JDPVehicleInfolist;
         }
 
 

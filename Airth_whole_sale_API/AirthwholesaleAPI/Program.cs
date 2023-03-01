@@ -157,6 +157,11 @@ builder.Services.AddScoped<IRepository<CleanImagesDetailsDTO>, Repository<CleanI
 builder.Services.AddScoped<IRepository<DGroup>, Repository<DGroup>>();
 builder.Services.AddScoped<IRepository<DGroupDTO>, Repository<DGroupDTO>>();
 
+builder.Services.AddScoped<IRepository<AithrRepWholeSale>, Repository<AithrRepWholeSale>>();
+builder.Services.AddScoped<IRepository<AithrRepWholeSaleDTO>, Repository<AithrRepWholeSaleDTO>>();
+
+
+
 //builder.Services.AddScoped<IRepository<AspNetRoles>, Repository<AspNetRoles>>();
 //builder.Services.AddScoped<IRepository<AspNetRolesDTO>, Repository<AspNetRolesDTO>>();
 

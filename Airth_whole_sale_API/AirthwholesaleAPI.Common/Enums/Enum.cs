@@ -151,7 +151,10 @@ namespace AirthwholesaleAPI.Common.Enums
         UspGetAllPositions,
         SPGetVINforCBBAPIValuesforGraphQLUnits,
         UspInsertDealersFromVehicleInfoforGraphQL,
-        SP_SyncJDPVehicleInfoGraphQL_Inventory
+        SP_SyncJDPVehicleInfoGraphQL_Inventory,
+        UspGetAllAithrRepWholeSale,
+        UspGetAllAithrRepWholeSaleById
+
 
     }
 }

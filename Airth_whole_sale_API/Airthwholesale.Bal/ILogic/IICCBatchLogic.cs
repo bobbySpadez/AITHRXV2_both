@@ -217,12 +217,6 @@ namespace Airthwholesale.Bal.ILogic
 
 
 
-        /// <summary>
-        /// For getting GraphQL list For All Pages response one by one
-        /// </summary>
-        /// <returns></returns>
-        Task<List<GraphQLDTO>> GetGraphQLForAllPages(IICCBatchApiDTO iICCBatchApiDTO);
-
 
         /// <summary>
         ///  Graph SQL

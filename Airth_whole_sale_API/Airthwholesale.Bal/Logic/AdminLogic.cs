@@ -9,6 +9,7 @@ using AirthwholesaleAPI.Common.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
 
 namespace Airthwholesale.Bal.Logic
 {
@@ -22,6 +23,12 @@ namespace Airthwholesale.Bal.Logic
         private readonly AppSettingsDTO _appSettings;
         private readonly IRepository<DGroupDTO> _groupDTORepository;
         private readonly IRepository<DGroup> _groupRepository;
+
+
+        private readonly IRepository<AithrRepWholeSaleDTO> _AithrRepWholeSaleDTORepository;
+        private readonly IRepository<AithrRepWholeSale> _AithrRepWholeSaleRepository;
+
+        
 
         private readonly IRepository<AspNetRolesDTO> _rolesDTORepository;
         private readonly IRepository<AspNetRoles> _rolesRepository;
@@ -57,7 +64,11 @@ namespace Airthwholesale.Bal.Logic
                IRepository<DealersList> dealersRepository,
                IRepository<SubscriptionDTO> SubscriptionDTORepository,
                IRepository<AithrPositions> aithrPositionsRepository,
-               IRepository<AithrPositionsDTO> aithrPositionsDTORepository
+               IRepository<AithrPositionsDTO> aithrPositionsDTORepository,
+
+               IRepository<AithrRepWholeSaleDTO> AithrRepWholeSaleDTORepository,
+               IRepository<AithrRepWholeSale> AithrRepWholeSaleRepository
+
             )
         {
 
@@ -75,6 +86,8 @@ namespace Airthwholesale.Bal.Logic
             _SubscriptionDTORepository = SubscriptionDTORepository;
             _aithrPositionsRepository = aithrPositionsRepository;
             _aithrPositionsDTORepository = aithrPositionsDTORepository;
+            _AithrRepWholeSaleDTORepository = AithrRepWholeSaleDTORepository;
+            _AithrRepWholeSaleRepository = AithrRepWholeSaleRepository;
         }
 
         #endregion
@@ -737,6 +750,135 @@ namespace Airthwholesale.Bal.Logic
 
         #endregion
 
+        #region AithrRepWholeSale
+
+        /// <summary>
+        /// Add Groups 
+        /// </summary>
+        /// <param name="User"></param>
+        /// <returns></returns>
+        public async Task<string> AddAithrRepWholeSale(AithrRepWholeSaleDTO obj)
+        {
+            try
+            {
+                //var _aithrRepWholeSaleModel = await _AithrRepWholeSaleRepository.Where(x => x.GroupName == obj.GroupName).ToListAsync();
+                //if (_aithrRepWholeSaleModel.Count > 0)
+                //{
+                //    return "AlreadyExist";
+                //}
+                AithrRepWholeSale aithrRepWholeSaleObj = MapAithrRepWholeSaleDTOToModel(obj);
+                await _AithrRepWholeSaleRepository.InsertAsync(aithrRepWholeSaleObj);
+                await _AithrRepWholeSaleRepository.SaveChangesAsync();
+                return aithrRepWholeSaleObj.id.ToString();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Update Groups 
+        /// </summary>
+        /// <param name="Groups"></param>
+        /// <returns></returns>
+        public async Task<string> UpdateAithrRepWholeSale(AithrRepWholeSaleDTO model)
+        {
+            try
+            {
+                AithrRepWholeSale Obj = this.MapAithrRepWholeSaleDTOToModel(model);
+                var entity = await _AithrRepWholeSaleRepository.Where(i => i.id == Obj.id).FirstOrDefaultAsync();
+                if (entity != null)
+                {
+                    entity.WID = Obj.WID;
+                    entity.AID = Obj.AID;
+                    entity.UpdatedBy = Obj.UpdatedBy;
+                    entity.UpdateDate = Obj.UpdateDate;
+
+                    await _AithrRepWholeSaleRepository.UpdateAsync(entity);
+                    await _AithrRepWholeSaleRepository.SaveChangesAsync();
+
+                    return entity.id.ToString();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return "NotFound";
+        }
+
+
+        /// <summary>
+        /// Delete
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<string> DeleteAithrRepWholeSale(int id)
+        {
+            try
+            {
+                var m = await _AithrRepWholeSaleRepository.Where(u => u.id == id).FirstOrDefaultAsync();
+                if (m != null)
+                {
+                    await _AithrRepWholeSaleRepository.DeleteAsync(m);
+                    return "Deleted";
+                }
+                else
+                    return "notfound";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
+        /// <summary>
+        /// Get ALL Groups
+        /// </summary>
+        /// <returns></returns>
+        public List<AithrRepWholeSaleDTO> GetAllAithrRepWholeSale()
+        {
+            try
+            {
+                string procName = SPROC_Names.UspGetAllAithrRepWholeSale.ToString();
+                var ParamsArray = new SqlParameter[2];
+                ParamsArray[0] = new SqlParameter() { ParameterName = "@OpParm", Value = "", DbType = System.Data.DbType.String };
+                ParamsArray[1] = new SqlParameter() { ParameterName = "@OpCode", Value = "", DbType = System.Data.DbType.String };
+                var resultData = _AithrRepWholeSaleDTORepository.ExecuteWithJsonResult(procName, "AithrRepWholeSaleDTO", ParamsArray);
+
+                return resultData != null ? resultData.ToList() : new List<AithrRepWholeSaleDTO>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+     
+
+        public List<AithrRepWholeSaleDTO> GetAithrRepWholeSaleByIds(string id)
+        {
+            try
+            {
+                string procName = SPROC_Names.UspGetAllAithrRepWholeSaleById.ToString();
+                var ParamsArray = new SqlParameter[3];
+                ParamsArray[0] = new SqlParameter() { ParameterName = "@OpParm", Value = "", DbType = System.Data.DbType.String };
+                ParamsArray[1] = new SqlParameter() { ParameterName = "@OpCode", Value = "", DbType = System.Data.DbType.String };
+                ParamsArray[2] = new SqlParameter() { ParameterName = "@id", Value = id, DbType = System.Data.DbType.String };
+                var resultData = _AithrRepWholeSaleDTORepository.ExecuteWithJsonResult(procName, "AithrRepWholeSaleDTO", ParamsArray);
+
+                return resultData != null ? resultData.ToList() : new List<AithrRepWholeSaleDTO>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Private Methods
@@ -819,6 +961,20 @@ namespace Airthwholesale.Bal.Logic
                 CreatedDate = obj.CreatedDate
             };
         }
+
+        private AithrRepWholeSale MapAithrRepWholeSaleDTOToModel(AithrRepWholeSaleDTO obj)
+        {
+            return new AithrRepWholeSale()
+            {
+                id = obj.id,
+                WID = obj.WID,
+                AID= obj.AID,
+                CreatedBy = obj.CreatedBy,
+                IsActive = obj.IsActive,
+                CreatedDate = obj.CreatedDate
+            };
+        }
+
         #endregion
     }
 }
