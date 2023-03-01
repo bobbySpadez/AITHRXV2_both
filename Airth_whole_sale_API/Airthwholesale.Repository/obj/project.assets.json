@@ -982,7 +982,7 @@
           }
         }
       },
-      "Z.EntityFramework.Extensions.EFCore/6.18.4": {
+      "Z.EntityFramework.Extensions.EFCore/6.18.5": {
         "type": "package",
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
@@ -2727,16 +2727,16 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Z.EntityFramework.Extensions.EFCore/6.18.4": {
-      "sha512": "5nPxQLrRoGFr4Vy1/2y+7eE0hPCovbKlku+Le00utfYkaqNeZWjTFPfeaq4UjYS9E4GNlWI+NNghCCLjEZWdoQ==",
+    "Z.EntityFramework.Extensions.EFCore/6.18.5": {
+      "sha512": "2kS70MryPVRo0MySkBQsPcv5OibkibI7sDLOMO26UR3Y5+5lt0MF/p1dd5/mdC/Ki29Lwm3aOGdngaExR/3qXQ==",
       "type": "package",
-      "path": "z.entityframework.extensions.efcore/6.18.4",
+      "path": "z.entityframework.extensions.efcore/6.18.5",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/net6.0/Z.EntityFramework.Extensions.EFCore.dll",
         "lib/net6.0/Z.EntityFramework.Extensions.EFCore.xml",
-        "z.entityframework.extensions.efcore.6.18.4.nupkg.sha512",
+        "z.entityframework.extensions.efcore.6.18.5.nupkg.sha512",
         "z.entityframework.extensions.efcore.nuspec"
       ]
     },
@@ -2754,7 +2754,7 @@
       "Microsoft.EntityFrameworkCore.Relational >= 6.0.7",
       "Newtonsoft.Json >= 13.0.1",
       "System.Data.SqlClient >= 4.8.3",
-      "Z.EntityFramework.Extensions.EFCore >= 6.18.4"
+      "Z.EntityFramework.Extensions.EFCore >= 6.18.5"
     ]
   },
   "packageFolders": {
@@ -2828,7 +2828,7 @@
           },
           "Z.EntityFramework.Extensions.EFCore": {
             "target": "Package",
-            "version": "[6.18.4, )"
+            "version": "[6.18.5, )"
           }
         },
         "imports": [

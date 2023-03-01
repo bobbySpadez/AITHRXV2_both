@@ -131,3 +131,4 @@ Airth_whole_sale_API/Airthwholesale.Bal/bin/Debug/net6.0/AirthwholesaleAPI.Commo
 Airth_whole_sale_API/Airthwholesale.Bal/bin/Release/net6.0/Airthwholesale.Bal.deps.json
 Airth_whole_sale_API/Airthwholesale.Bal/bin/Release/net6.0/Airthwholesale.Bal.dll
 *.pdb
+*.v2

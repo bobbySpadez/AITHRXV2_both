@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "yuadffK1Ntyq5I4LegjfwMnxfCU5NqHoD0fmnhgBCFOTimqNVYWjkSjEGmkCiZ3Y0D5edxT+HaI0S4yN3wo6Fw==",
+  "dgSpecHash": "u2LNeW6tAnz69clN1THdPvoXfzH43KIHmwKVA4hR7f2MKb+H2Q9tLFWCwIOP1n20w1zTc49IQeozKj/Qnzjqmg==",
   "success": true,
-  "projectFilePath": "D:\\AITHRXV2_both\\AITHRXV2_both\\Airth_whole_sale_API\\AirthwholesaleAPI\\AirthwholesaleAPI.csproj",
+  "projectFilePath": "D:\\Airthr version 2\\AITHRXV2_both\\Airth_whole_sale_API\\AirthwholesaleAPI\\AirthwholesaleAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Spadez\\.nuget\\packages\\antlr\\3.4.1.9004\\antlr.3.4.1.9004.nupkg.sha512",
     "C:\\Users\\Spadez\\.nuget\\packages\\automapper\\11.0.1\\automapper.11.0.1.nupkg.sha512",
@@ -197,14 +197,14 @@
     "C:\\Users\\Spadez\\.nuget\\packages\\webgrease\\1.6.0\\webgrease.1.6.0.nupkg.sha512",
     "C:\\Users\\Spadez\\.nuget\\packages\\windowsazure.storage\\9.3.3\\windowsazure.storage.9.3.3.nupkg.sha512",
     "C:\\Users\\Spadez\\.nuget\\packages\\z.entityframework.extensions\\6.16.1\\z.entityframework.extensions.6.16.1.nupkg.sha512",
-    "C:\\Users\\Spadez\\.nuget\\packages\\z.entityframework.extensions.efcore\\6.18.4\\z.entityframework.extensions.efcore.6.18.4.nupkg.sha512"
+    "C:\\Users\\Spadez\\.nuget\\packages\\z.entityframework.extensions.efcore\\6.18.5\\z.entityframework.extensions.efcore.6.18.5.nupkg.sha512"
   ],
   "logs": [
     {
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'Antlr 3.4.1.9004' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "message": "Package 'Antlr 3.4.1.9004' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
       "libraryId": "Antlr",
       "targetGraphs": [
         "net6.0"
@@ -214,7 +214,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'BCrypt.Net 0.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "message": "Package 'BCrypt.Net 0.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
       "libraryId": "BCrypt.Net",
       "targetGraphs": [
         "net6.0"
@@ -224,7 +224,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'Microsoft.AspNet.Razor 3.2.9' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "message": "Package 'Microsoft.AspNet.Razor 3.2.9' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
       "libraryId": "Microsoft.AspNet.Razor",
       "targetGraphs": [
         "net6.0"
@@ -234,7 +234,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'Microsoft.AspNet.WebPages 3.2.9' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "message": "Package 'Microsoft.AspNet.WebPages 3.2.9' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
       "libraryId": "Microsoft.AspNet.WebPages",
       "targetGraphs": [
         "net6.0"
@@ -244,7 +244,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'Microsoft.Owin 4.2.2' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "message": "Package 'Microsoft.Owin 4.2.2' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
       "libraryId": "Microsoft.Owin",
       "targetGraphs": [
         "net6.0"
@@ -254,7 +254,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'Microsoft.Web.Infrastructure 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "message": "Package 'Microsoft.Web.Infrastructure 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
       "libraryId": "Microsoft.Web.Infrastructure",
       "targetGraphs": [
         "net6.0"
@@ -264,7 +264,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'Owin 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "message": "Package 'Owin 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
       "libraryId": "Owin",
       "targetGraphs": [
         "net6.0"
@@ -274,7 +274,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'WebGrease 1.6.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "message": "Package 'WebGrease 1.6.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
       "libraryId": "WebGrease",
       "targetGraphs": [
         "net6.0"

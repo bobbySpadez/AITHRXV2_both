@@ -166,6 +166,16 @@ namespace Airthwholesale.Data.Models
 
         public int? DaysInInventory { get; set; }
 
-        
+        /// <summary>
+        ///  New columns for Graph QL
+        /// </summary>
+
+        public double? ProductPrice { get; set; }
+
+        public string SeatCapacity { get; set; }
+
+        public string condition { get; set; }
+
+
     }
 }

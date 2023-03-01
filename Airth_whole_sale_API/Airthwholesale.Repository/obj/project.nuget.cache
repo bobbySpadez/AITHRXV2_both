@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "iCqrsAW0V812KgX2Ryb04he31119dZeuiTISq5asHucttppRGYI8cQYR2cSVQnMIIz2m2TPpaqoewDkMnGuedQ==",
+  "dgSpecHash": "PlYX//IXRYY0YqF4j1zR1UgyK0QjnmLqYDcG3J+GNB3K6it/0aRGIPoftf5qXbJT3RvYl0ENg5UbuCtxsQXL5A==",
   "success": true,
   "projectFilePath": "D:\\Airthr version 2\\AITHRXV2_both\\Airth_whole_sale_API\\Airthwholesale.Repository\\Airthwholesale.Repository.csproj",
   "expectedPackageFiles": [
@@ -60,7 +60,7 @@
     "C:\\Users\\Spadez\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512",
     "C:\\Users\\Spadez\\.nuget\\packages\\system.text.encoding.codepages\\4.7.0\\system.text.encoding.codepages.4.7.0.nupkg.sha512",
     "C:\\Users\\Spadez\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512",
-    "C:\\Users\\Spadez\\.nuget\\packages\\z.entityframework.extensions.efcore\\6.18.4\\z.entityframework.extensions.efcore.6.18.4.nupkg.sha512"
+    "C:\\Users\\Spadez\\.nuget\\packages\\z.entityframework.extensions.efcore\\6.18.5\\z.entityframework.extensions.efcore.6.18.5.nupkg.sha512"
   ],
   "logs": []
 }

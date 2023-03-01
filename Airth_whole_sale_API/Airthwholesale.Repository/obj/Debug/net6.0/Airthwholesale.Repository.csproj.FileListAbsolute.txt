@@ -32,3 +32,20 @@ D:\AITHRXV2_both\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\ob
 D:\AITHRXV2_both\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\obj\Debug\net6.0\Airthwholesale.Repository.pdb
 D:\AITHRXV2_both\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\obj\Debug\net6.0\Airthwholesale.Repository.genruntimeconfig.cache
 D:\AITHRXV2_both\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\obj\Debug\net6.0\ref\Airthwholesale.Repository.dll
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\bin\Debug\net6.0\Airthwholesale.Repository.deps.json
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\bin\Debug\net6.0\Airthwholesale.Repository.runtimeconfig.json
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\bin\Debug\net6.0\Airthwholesale.Repository.dll
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\bin\Debug\net6.0\Airthwholesale.Repository.pdb
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\bin\Debug\net6.0\Airthwholesale.Data.dll
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\bin\Debug\net6.0\Airthwholesale.Data.pdb
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\obj\Debug\net6.0\Airthwholesale.Repository.csproj.AssemblyReference.cache
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\obj\Debug\net6.0\Airthwholesale.Repository.GeneratedMSBuildEditorConfig.editorconfig
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\obj\Debug\net6.0\Airthwholesale.Repository.AssemblyInfoInputs.cache
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\obj\Debug\net6.0\Airthwholesale.Repository.AssemblyInfo.cs
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\obj\Debug\net6.0\Airthwholesale.Repository.csproj.CoreCompileInputs.cache
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\obj\Debug\net6.0\Airthwholesale.Repository.csproj.CopyComplete
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\obj\Debug\net6.0\Airthwholesale.Repository.dll
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\obj\Debug\net6.0\refint\Airthwholesale.Repository.dll
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\obj\Debug\net6.0\Airthwholesale.Repository.pdb
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\obj\Debug\net6.0\Airthwholesale.Repository.genruntimeconfig.cache
+D:\Airthr version 2\AITHRXV2_both\Airth_whole_sale_API\Airthwholesale.Repository\obj\Debug\net6.0\ref\Airthwholesale.Repository.dll

@@ -99,8 +99,8 @@ namespace AirthwholesaleAPI.Controllers
 
 
         #region GraphQL
-        [HttpGet("GetGraphQLForAllPages")]
-        public async Task<IActionResult> GetGraphQLForAllPages()
+        [HttpGet("GetGraphQLAllUnits")]
+        public async Task<IActionResult> GetGraphQLAllUnits()
         {
 
             //Offset is the pagination
@@ -228,6 +228,85 @@ namespace AirthwholesaleAPI.Controllers
             {
                 throw;
             }
+        }
+
+        private static List<JDPVehicleInfo> InsertJDPVehicleInfoFromGraphQL(List<Vehicle> Vehicles, string CalledBy)
+        {
+
+
+            List<JDPVehicleInfo> JDPVehicleInfolist = new List<JDPVehicleInfo>();
+            // loop for adding Units in lists
+            foreach (var response in Vehicles)
+            {
+                Random rnd = new Random();
+                int numDealerID = rnd.Next();
+
+                JDPVehicleInfo objectvechicleinfo = new JDPVehicleInfo();
+                objectvechicleinfo.VehicleID = 0;
+                objectvechicleinfo.DealerID = numDealerID;
+                objectvechicleinfo.DealerName = TrimStringValueToLimit(response.dealer_name, 100);
+                objectvechicleinfo.IsNew = true;
+                objectvechicleinfo.VIN = TrimStringValueToLimit(response.vin, 17);
+                objectvechicleinfo.StockNumber = TrimStringValueToLimit(response.stock_number, 100);
+                objectvechicleinfo.IsCertified = true;
+                objectvechicleinfo.Year = (response.year == 0 ? 0000 : response.year);
+                objectvechicleinfo.Make = TrimStringValueToLimit(response.make, 100);
+                objectvechicleinfo.Model = TrimStringValueToLimit(response.model, 100);
+                objectvechicleinfo.ModelCode = response.model;
+                objectvechicleinfo.Trim = TrimStringValueToLimit(response.trim, 100);
+                objectvechicleinfo.BodyName = TrimStringValueToLimit((response.body_type == null ? "" : response.body_type.ToString()), 100);
+                objectvechicleinfo.BodyStyle = "";
+                objectvechicleinfo.CityMPG = 0;
+                objectvechicleinfo.HwyMPG = 0;
+                objectvechicleinfo.DaysInSotck = 0;
+                objectvechicleinfo.ValueSource = ""; ;
+                objectvechicleinfo.ExteriorColor = TrimStringValueToLimit(response.exterior_colour, 100);
+                objectvechicleinfo.InteriorColor = TrimStringValueToLimit(response.interior_colour, 100);
+                objectvechicleinfo.InteriorMaterial = "";
+                objectvechicleinfo.Engine = "";
+                objectvechicleinfo.Transmission = TrimStringValueToLimit(response.transmission, 100);
+                objectvechicleinfo.TransmissionSpeed = TrimStringValueToLimit(response.transmission, 100);
+                objectvechicleinfo.InStockDate = response.landed_at;
+                objectvechicleinfo.LastModifiedDate = DateTime.Now;
+                objectvechicleinfo.IsSpecial = true;
+                objectvechicleinfo.BodyType = TrimStringValueToLimit(response.body_type, 100);
+                objectvechicleinfo.Locked = false;
+                objectvechicleinfo.VehicleStatus = "";
+                objectvechicleinfo.DealerCertified1 = true;
+                objectvechicleinfo.DealerCertified2 = true;
+                objectvechicleinfo.GenericExteriorColor = "";
+                objectvechicleinfo.VideoUrl = "";
+                objectvechicleinfo.Drivetrain = TrimStringValueToLimit(response.drivetrain, 100);
+                objectvechicleinfo.Mileage = 0;
+                objectvechicleinfo.Category1 = "";
+                objectvechicleinfo.Category2 = "";
+                objectvechicleinfo.Category3 = "";
+                objectvechicleinfo.Category4 = "";
+                objectvechicleinfo.Category5 = "";
+                objectvechicleinfo.Style = "";
+                objectvechicleinfo.ChromeStyleID = 0;
+                objectvechicleinfo.ZipCode = "";
+                objectvechicleinfo.ExportDealerID = "";
+                objectvechicleinfo.EngineFuelType = "";
+                objectvechicleinfo.ExteriorColorCode = "";
+                objectvechicleinfo.ExteriorGenericColorDescription = "";
+                objectvechicleinfo.IsActive = true;
+                objectvechicleinfo.CreatedDate = DateTime.Now;
+                objectvechicleinfo.CreatedBy = 800;
+                objectvechicleinfo.IsInternalSynch = false;
+                objectvechicleinfo.SynchedBy = 1;
+                objectvechicleinfo.InternalID = 1;
+                objectvechicleinfo.APICalledBy = CalledBy;
+                objectvechicleinfo.ProductPrice = response.product_price;
+                objectvechicleinfo.SeatCapacity = response.seats.ToString();
+                objectvechicleinfo.condition = TrimStringValueToLimit(response.condition, 100);
+
+
+                JDPVehicleInfolist.Add(objectvechicleinfo);
+            }
+
+
+            return JDPVehicleInfolist;
         }
 
         private StringContent QueryContent(int offSet)
@@ -1540,76 +1619,7 @@ namespace AirthwholesaleAPI.Controllers
         }
 
 
-        private static List<JDPVehicleInfo> InsertJDPVehicleInfoFromGraphQL(List<Vehicle> Vehicles, string CalledBy)
-        {
-           
-
-            List<JDPVehicleInfo> JDPVehicleInfolist = new List<JDPVehicleInfo>();
-            // loop for adding Units in lists
-            foreach (var response in Vehicles)
-            {
-                JDPVehicleInfo objectvechicleinfo = new JDPVehicleInfo();
-                objectvechicleinfo.VehicleID = 0;
-                objectvechicleinfo.DealerID = 0;
-                objectvechicleinfo.DealerName = TrimStringValueToLimit(response.dealer_name, 100);
-                objectvechicleinfo.IsNew = true;
-                objectvechicleinfo.VIN = TrimStringValueToLimit(response.vin, 17);
-                objectvechicleinfo.StockNumber = TrimStringValueToLimit(response.stock_number, 100);
-                objectvechicleinfo.IsCertified = true;
-                objectvechicleinfo.Year = (response.year == 0 ? 0000 : response.year);
-                objectvechicleinfo.Make = TrimStringValueToLimit(response.make, 100);
-                objectvechicleinfo.Model = TrimStringValueToLimit(response.model, 100);
-                objectvechicleinfo.ModelCode = response.model;
-                objectvechicleinfo.Trim = TrimStringValueToLimit(response.trim, 100);
-                objectvechicleinfo.BodyName = TrimStringValueToLimit((response.body_type == null ? "" : response.body_type.ToString()), 100);
-                objectvechicleinfo.BodyStyle = "";
-                objectvechicleinfo.CityMPG = 0;
-                objectvechicleinfo.HwyMPG = 0;
-                objectvechicleinfo.DaysInSotck = 0;
-                objectvechicleinfo.ValueSource = ""; ;
-                objectvechicleinfo.ExteriorColor = TrimStringValueToLimit(response.exterior_colour, 100);
-                objectvechicleinfo.InteriorColor = TrimStringValueToLimit(response.interior_colour, 100);
-                objectvechicleinfo.InteriorMaterial = "";
-                objectvechicleinfo.Engine = "";
-                objectvechicleinfo.Transmission = TrimStringValueToLimit(response.transmission, 100);
-                objectvechicleinfo.TransmissionSpeed = TrimStringValueToLimit(response.transmission, 100);
-                objectvechicleinfo.InStockDate = DateTime.Now;
-                objectvechicleinfo.LastModifiedDate = DateTime.Now;
-                objectvechicleinfo.IsSpecial = true;
-                objectvechicleinfo.BodyType = TrimStringValueToLimit(response.body_type, 100);
-                objectvechicleinfo.Locked = false;
-                objectvechicleinfo.VehicleStatus = "";
-                objectvechicleinfo.DealerCertified1 = true;
-                objectvechicleinfo.DealerCertified2 = true;
-                objectvechicleinfo.GenericExteriorColor = "";
-                objectvechicleinfo.VideoUrl = "";
-                objectvechicleinfo.Drivetrain = TrimStringValueToLimit(response.drivetrain, 100);
-                objectvechicleinfo.Mileage = 0;
-                objectvechicleinfo.Category1 = "";
-                objectvechicleinfo.Category2 = "";
-                objectvechicleinfo.Category3 = "";
-                objectvechicleinfo.Category4 = "";
-                objectvechicleinfo.Category5 = "";
-                objectvechicleinfo.Style = "";
-                objectvechicleinfo.ChromeStyleID = 0;
-                objectvechicleinfo.ZipCode = "";
-                objectvechicleinfo.ExportDealerID = "";
-                objectvechicleinfo.EngineFuelType = "";
-                objectvechicleinfo.ExteriorColorCode = "";
-                objectvechicleinfo.ExteriorGenericColorDescription = "";
-                objectvechicleinfo.IsActive = true;
-                objectvechicleinfo.CreatedDate = DateTime.Now;
-                objectvechicleinfo.CreatedBy = 800;
-                objectvechicleinfo.IsInternalSynch = false;
-                objectvechicleinfo.SynchedBy = 1;
-                objectvechicleinfo.InternalID = 1;
-                objectvechicleinfo.APICalledBy = CalledBy;
-                JDPVehicleInfolist.Add(objectvechicleinfo);
-            }
-
-            
-            return JDPVehicleInfolist;
-        }
+       
 
 
         /// <summary>
